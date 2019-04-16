@@ -11,6 +11,7 @@ class App extends React.Component {
     this.state = {
       movieList: [],
       genres: [],
+      likedMovies: [],
     };
     
     this.getMovies();
@@ -50,6 +51,16 @@ class App extends React.Component {
             .catch((error) => console.log(error));
     };
 
+   handleLike = (id) => {
+        const likedMovies = this.state.likedMovies;
+
+        const index = likedMovies.indexOf(id);
+        likedMovies.includes(id) ? likedMovies.splice(index, 1) : likedMovies.push(id);
+
+        this.setState({likedMovies})
+    };
+ 
+
   render() {
     const { movieList, genres } = this.state;
     
@@ -72,6 +83,9 @@ class App extends React.Component {
             score={listItem.vote_average}
             votes={listItem.vote_count}
             description={listItem.overview}
+            itemId={listItem.id}
+            like={this.state.likedMovies.includes(listItem.id)}
+            handleLike={this.handleLike}
           />
         ))}
       </div>

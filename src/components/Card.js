@@ -6,6 +6,7 @@ class Card extends React.Component {
     
     this.state = {
       opened: false,
+      liked: false,
     }
   }
   
@@ -17,8 +18,11 @@ class Card extends React.Component {
       score,
       votes,
       description,
+      like,
+      handleLike,
+      itemId,
     } = this.props;
-    const { opened } = this.state;
+    const { opened ,liked } = this.state;
     
     return (
       <div className="card">
@@ -33,9 +37,15 @@ class Card extends React.Component {
           {title}
         </div>
     
-        <div className="card__like">
-            <i className="fa fa-heart-o" />
-        </div>
+        <div className="card__like" onClick={() => handleLike(itemId)}>
+            {
+              like ?
+              (<i className="fa fa-heart"/>
+            ) : (
+             <i className="fa fa-heart-o"/>
+              )}
+
+                </div>
     
         <div className="card__subtitle">
             <span>{releaseDate}</span>
