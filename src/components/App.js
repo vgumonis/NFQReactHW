@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card';
+import Genres from './Genres';
 import axios from 'axios';
 import { endpoints, getImageUrl } from '../../config';
 
@@ -9,9 +10,11 @@ class App extends React.Component {
     
     this.state = {
       movieList: [],
+      genres: [],
     };
     
     this.getMovies();
+    this.getGenres();
   }
   
   getMovies = () => {
@@ -21,17 +24,46 @@ class App extends React.Component {
       .catch((error) => console.log(error));
   };
   
+ getGenres = () => {
+        axios
+            .get(endpoints.genres())
+            .then((res) => this.setGenres(res.data.genres))
+            .catch((error) => console.log(error));
+    };
+
   setMovieList = (list) => {
     this.setState({
       movieList: list,
     });
   };
   
+ setGenres = (list) => {
+        this.setState({
+            genres: list,
+        });
+    };
+
+    getMoviesByGenre = (id) => {
+        axios
+            .get(endpoints.genreMovies(id))
+            .then((res) => this.setMovieList(res.data.results))
+            .catch((error) => console.log(error));
+    };
+
   render() {
-    const { movieList } = this.state;
+    const { movieList, genres } = this.state;
     
     return (
       <div>
+
+        {genres.map((listItem) => (
+                    <Genres
+                        genre={listItem.name}
+                        click={this.getMoviesByGenre.bind(this, listItem.id)}
+                    />
+                ))}
+
+
         {movieList.map((listItem) => (
           <Card
             backgroundImage={getImageUrl(listItem.backdrop_path)}
